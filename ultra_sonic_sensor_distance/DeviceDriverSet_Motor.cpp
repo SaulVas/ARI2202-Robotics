@@ -1,4 +1,4 @@
-#include "DeviceDriverSet_1.h"
+#include "DeviceDriverSet_motor.h"
 
 /*Motor control*/
 void DeviceDriverSet_Motor::Motor_Init(void) {
