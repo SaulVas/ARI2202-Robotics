@@ -10,6 +10,7 @@ Application app;
 bool executing = true;
 unsigned long startTime;
 
+
 void setup() {
   // Initialize Motor and Ultrasonic Sensor
   motor.Motor_Init();
@@ -34,13 +35,11 @@ void loop() {
     // Check if obstacle is within 20 cm
     if (distance <= 20) {
       // Stop the robot and end the program
-      app.Motion_Control = 8;
-      ApplicationFunctionSet_SmartRobotCarMotionControl(app.Motion_Control, 0);
+      ApplicationFunctionSet_SmartRobotCarMotionControl(app.stop_it, 0);
       executing = false;
     }
   } else {
-    app.Motion_Control = 8;
-    ApplicationFunctionSet_SmartRobotCarMotionControl(app.Motion_Control, 0);
+    ApplicationFunctionSet_SmartRobotCarMotionControl(app.stop_it, 0);
     executing = false;
   }
   
