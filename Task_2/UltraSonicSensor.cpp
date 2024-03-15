@@ -1,14 +1,12 @@
-#include "DeviceDriverSet_USS.h"
+#include "UltraSonicSensor.h"
 
 /*Ultra Sonic Sensor control*/
-void DeviceDriverSet_Uss::Uss_Init(void) {
-  Serial.begin(9600);
-
+void UltraSonicSensor::init(void) {
   pinMode(ECHO_PIN, INPUT);
   pinMode(TRIG_PIN, OUTPUT);
 }
 
-void DeviceDriverSet_Uss::Uss_Send_Pulse(void) {
+void UltraSonicSensor::send_pulse(void) {
   digitalWrite(TRIG_PIN, LOW);
   delayMicroseconds(2);
 
@@ -18,7 +16,7 @@ void DeviceDriverSet_Uss::Uss_Send_Pulse(void) {
 }
 
 // Returns distance in cm
-long DeviceDriverSet_Uss::Uss_Get_Distance(void) {
+long UltraSonicSensor::get_distance(void) {
   long duration, distance;
   duration = pulseIn(ECHO_PIN, HIGH);
   distance = duration * 0.034 / 2;

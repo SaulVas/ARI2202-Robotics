@@ -1,56 +1,49 @@
 #include <avr/wdt.h>
-#include "DeviceDriverSet_Motor.h"
-#include "ApplicationFunctionSet_1.cpp"
-#include "DeviceDriverSet_USS.h"
+#include "Motor.h"
+#include "UltraSonicSensor.h"
 
 #define SPEED 50
 
-DeviceDriverSet_Motor motor;
-DeviceDriverSet_Uss ultrasonic;
-Application app;
+Motor motor;
+UltraSonicSensor ultrasonic;
 
 void setup() {
+  Serial.begin(9600);
   // Initialize Motor and Ultrasonic Sensor
-  motor.Motor_Init();
-  ultrasonic.Uss_Init();
+  motor.init();
+  ultrasonic.init();
 }
 
 void loop() {
   // Check for obstacle
-  ultrasonic.Uss_Send_Pulse();
-  long distance = ultrasonic.Uss_GetDistance();
+  ultrasonic.send_pulse();
+  long distance = ultrasonic.get_distance();
   
   if (distance < 20) {
     // Obstacle detected, perform obstacle avoidance
     
     // Turn 90 degrees left
-    ApplicationFunctionSet_NinetyDegreeTurn(LEFT);
+    motor.turn(LEFT, 90);
     
     // Check for obstacle again
-    ultrasonic.Uss_Send_Pulse();
-    distance = ultrasonic.Uss_GetDistance();
+    ultrasonic.send_pulse();
+    distance = ultrasonic.get_distance();
     
     if (distance < 20) {
       // Obstacle still detected, turn 180 degrees right
-      ApplicationFunctionSet_NinetyDegreeTurn(RIGHT);
-      ApplicationFunctionSet_NinetyDegreeTurn(RIGHT);
+      motor.turn(RIGHT, 180);
       
       // Check for obstacle again
-      ultrasonic.Uss_Send_Pulse();
-      distance = ultrasonic.Uss_GetDistance();
+      ultrasonic.send_pulse();
+      distance = ultrasonic.get_distance();
       
       if (distance < 20) {
         // Obstacle still detected, turn another 90 degrees right
-        ApplicationFunctionSet_NinetyDegreeTurn(RIGHT);
+        motor.turn(RIGHT, 90);
       }
     }
   } else {
     // No obstacle detected, move forward
-    ApplicationFunctionSet_SmartRobotCarMotionControl(FORWARD, SPEED);
+    motor.move(FORWARD, SPEED);
   }
-}
-
-void loop() {
-  
-  
 }

@@ -1,26 +1,22 @@
 #include <avr/wdt.h>
-#include "DeviceDriverSet_Motor.h"
-#include "ApplicationFunctionSet_1.cpp"
-#include "DeviceDriverSet_USS.h"
+#include "Motor.h"
+#include "UltraSonicSensor.h"
 
-
-DeviceDriverSet_Motor AppMotor;
-DeviceDriverSet_Uss AppUss;
-Application app;
-
-DeviceDriverSet_Uss;
+Motor motor;
+UltraSonicSensor ultrasonic;
 
 void setup() {
-  AppMotor.Motor_Init();
-  AppUss.Uss_Init();
+  Serial.begin(9600)
+  motor.init();
+  ultrasonic.init();
   delay(1000);
 }
 
 void loop() {
   long distance;
   
-  AppUss.Uss_Send_Pulse();
-  distance = AppUss.Uss_Get_Distance();
+  ultrasonic.send_pulse();
+  distance = ultrasonic.get_distance();
 
   Serial.print("Distance: ");
   Serial.print(distance);
