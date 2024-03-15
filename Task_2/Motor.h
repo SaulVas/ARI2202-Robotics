@@ -34,8 +34,8 @@ private:
 
   // Controls the motor based on direction of each side, speed and enable/disable control
   void motor_control(boolean direction_A, uint8_t speed_A,
-                                     boolean direction_B, uint8_t speed_B, 
-                                     boolean controlED                     
+                    boolean direction_B, uint8_t speed_B, 
+                    boolean controlED                     
   );         
 
 public:
