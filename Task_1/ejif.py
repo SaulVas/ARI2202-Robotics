@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 
 # Sample data (replace with your actual data)
-actual_distances = [10, 20, 30, 40, 50]  # Actual distances in cm
+actual_distances = [15, 20, 30, 40, 50]  # Actual distances in cm
 measured_distances = [9, 19, 32, 38, 48]  # Measured distances in cm
 
 # Plot the data
