@@ -1,11 +1,10 @@
-#ifndef _DeviceDriverSet_1_H_
-#define _DeviceDriverSet_1_H_
+#ifndef _InfraRedSensor_H_
+#define _InfraRedSensor_H_
 
 #include <arduino.h>
 
 /*Infrared Sensor*/
-//pin numbers are from notes
-class DeviceDriverSet_Infra {
+class InfraRedSensor {
     private:
     #define LEFT_IRS_PIN = A2;
     #define MIDDLE_IRS_PIN = A1;
@@ -13,7 +12,7 @@ class DeviceDriverSet_Infra {
 
 public: 
 
-void LineFollower_Init(void);
+void init(void);
 
 void FollowLine(void);
 };
