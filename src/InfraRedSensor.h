@@ -12,9 +12,9 @@ class InfraRedSensor {
 
 public: 
 
-void init(void);
+    void init(void);
 
-void FollowLine(void);
+    void FollowLine(void);
 };
 
 #endif
