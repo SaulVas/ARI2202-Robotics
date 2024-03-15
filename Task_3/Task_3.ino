@@ -2,7 +2,7 @@
 #include "Motor.h"
 #include "UltraSonicSensor.h"
 
-#define SPEED 50
+#define SPEED 100
 
 Motor motor;
 UltraSonicSensor ultrasonic;
@@ -12,6 +12,8 @@ void setup() {
   // Initialize Motor and Ultrasonic Sensor
   motor.init();
   ultrasonic.init();
+
+  delay(1000);
 }
 
 void loop() {
