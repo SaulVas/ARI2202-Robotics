@@ -87,3 +87,10 @@ static void ApplicationFunctionSet_SmartRobotCarMotionControl(SmartRobotCarMotio
     break;
   }
 }
+
+static void ApplicationFunctionSet_NinetyDegreeTurn(SmartRobotCarMotionControl direction) {
+  if (direction == Left || direction == Right) {
+    ApplicationFunctionSet_SmartRobotCarMotionControl(direction, 50);
+    delay(1650);
+  }
+}
