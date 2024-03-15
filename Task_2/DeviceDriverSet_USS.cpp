@@ -17,7 +17,7 @@ void DeviceDriverSet_Uss::Uss_Send_Pulse(void) {
   digitalWrite(TRIG_PIN, LOW);
 }
 
-
+// Returns distance in cm
 long DeviceDriverSet_Uss::Uss_Get_Distance(void) {
   long duration, distance;
   duration = pulseIn(ECHO_PIN, HIGH);
