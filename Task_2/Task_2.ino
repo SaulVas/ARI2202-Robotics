@@ -10,14 +10,13 @@ unsigned long startTime;
 
 
 void setup() {
-  Serial.begin(9600);
   // Initialize Motor and Ultrasonic Sensor
   motor.init();
   ultrasonic.init();
 
   delay(1000);
 
-  motor.move(FORWARD , 100);
+  motor.move(FORWARD, 100);
   // Record start time
   startTime = millis(); 
 

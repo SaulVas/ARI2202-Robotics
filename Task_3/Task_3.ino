@@ -8,7 +8,6 @@ Motor motor;
 UltraSonicSensor ultrasonic;
 
 void setup() {
-  Serial.begin(9600);
   // Initialize Motor and Ultrasonic Sensor
   motor.init();
   ultrasonic.init();
