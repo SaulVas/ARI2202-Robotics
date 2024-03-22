@@ -30,7 +30,7 @@ private:
   #define CONTROL_ENABLE true
   #define CONTROL_DISABLE false
 
-  #define TIME_FOR_360_DEGREE 6600
+  #define TIME_FOR_360_DEGREE 6400
 
   // Controls the motor based on direction of each side, speed and enable/disable control
   void motor_control(boolean direction_A, uint8_t speed_A,
