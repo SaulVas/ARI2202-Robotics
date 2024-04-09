@@ -11,12 +11,9 @@ class InfraRedSensor {
     #define RIGHT_IRS_PIN A0
 
 public: 
-
     void init(void);
-
     void analogue_values(void);
 
-    void follow_line(void);
 };
 
 #endif

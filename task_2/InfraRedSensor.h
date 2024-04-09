@@ -6,17 +6,20 @@
 /*Infrared Sensor*/
 class InfraRedSensor {
     private:
+    // Pins for the Infrared Sensors
     #define LEFT_IRS_PIN A2
     #define MIDDLE_IRS_PIN A1
     #define RIGHT_IRS_PIN A0
 
+    int get_analogue_value(int pin);
+
 public: 
+    # define THRESHOLD 550
 
     void init(void);
-
-    void analogue_values(void);
-
-    void follow_line(void);
+    int get_left(void);
+    int get_middle(void);
+    int get_right(void);
 };
 
 #endif

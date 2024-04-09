@@ -19,22 +19,3 @@ void InfraRedSensor::analogue_values(void){
     Serial.print(" Right: ");
     Serial.println(right);
 }
-
-// void InfraRedSensor::follow_line(void){
-//     int left = digitalRead(LEFT_IRS_PIN);
-//     int middle = digitalRead(MIDDLE_IRS_PIN);
-//     int right = digitalRead(RIGHT_IRS_PIN);
-
-//     if (middle == HIGH){
-//         //move foward
-//     }
-//     else if (left == HIGH){
-//         //turn left
-//     }
-//     else if (right == HIGH){
-//         //turn right
-//     }
-//     else {
-//         //stop
-//     }
-// }

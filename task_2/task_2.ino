@@ -4,18 +4,31 @@
 #include "InfraRedSensor.h"
 
 Motor motor;
-UltraSonicSensor ultrasonic;
 InfraRedSensor infrared;
 
 void setup() {
-  Serial.begin(9600);
   motor.init();
-  ultrasonic.init();
   infrared.init();
   delay(1000);
 }
 
 void loop() {
-  infrared.analogue_values();
-  delay(500);
+
+  int left = infrared.get_left();
+  int middle = infrared.get_middle();
+  int right = infrared.get_right();
+
+  if (middle >= THRESHOLD){
+      motor.move(FORWARD); // Call motor.move function to move forward
+  }
+  else if (left >= THRESHOLD){
+      motor.move(LEFT_FORWARD); // Call motor.move function to turn left
+  }
+  else if (right >= THRESHOLD){
+      motor.move(RIGHT_FORWARD)// Call motor.move function to turn right
+  }
+  else {
+      motor.move(STOP); // Call motor.move function to stop
+  }
+
 }

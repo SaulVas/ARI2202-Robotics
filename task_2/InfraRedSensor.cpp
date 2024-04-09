@@ -1,5 +1,10 @@
 #include "InfraRedSensor.h"
 
+int InfraRedSensor::get_analogue_value(int pin){
+    int value = analogRead(pin);
+    return value;
+}
+
 /*Infrared sensors are set to on and are capable of reading the line*/
 void InfraRedSensor::init(void){
     pinMode(LEFT_IRS_PIN, INPUT);
@@ -7,34 +12,14 @@ void InfraRedSensor::init(void){
     pinMode(RIGHT_IRS_PIN, INPUT);
 }
 
-void InfraRedSensor::analogue_values(void){
-    int left = analogRead(LEFT_IRS_PIN);
-    int middle = analogRead(MIDDLE_IRS_PIN);
-    int right = analogRead(RIGHT_IRS_PIN);
-
-    Serial.print("Left: ");
-    Serial.print(left);
-    Serial.print(" Middle: ");
-    Serial.print(middle);
-    Serial.print(" Right: ");
-    Serial.println(right);
+int InfraRedSensor::get_left(void){
+    return get_analogue_value(LEFT_IRS_PIN);
 }
 
-// void InfraRedSensor::follow_line(void){
-//     int left = digitalRead(LEFT_IRS_PIN);
-//     int middle = digitalRead(MIDDLE_IRS_PIN);
-//     int right = digitalRead(RIGHT_IRS_PIN);
+int InfraRedSensor::get_middle(void){
+    return get_analogue_value(MIDDLE_IRS_PIN);
+}
 
-//     if (middle == HIGH){
-//         //move foward
-//     }
-//     else if (left == HIGH){
-//         //turn left
-//     }
-//     else if (right == HIGH){
-//         //turn right
-//     }
-//     else {
-//         //stop
-//     }
-// }
+int InfraRedSensor::get_right(void){
+    return get_analogue_value(RIGHT_IRS_PIN);
+}
