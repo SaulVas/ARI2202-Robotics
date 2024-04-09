@@ -1,7 +1,7 @@
 #include <avr/wdt.h>
 #include "Motor.h"
-#include "UltraSonicSensor.h"
 #include "InfraRedSensor.h"
+#define SPEED 75
 
 Motor motor;
 InfraRedSensor infrared;
@@ -18,17 +18,20 @@ void loop() {
   int middle = infrared.get_middle();
   int right = infrared.get_right();
 
-  if (middle >= THRESHOLD){
-      motor.move(FORWARD); // Call motor.move function to move forward
+  if (middle >= THRESHOLD && (left >= THRESHOLD || right >= THRESHOLD)){
+      motor.move(FORWARD, SPEED); // Call motor.move function to move forward
+  }
+  else if (middle >= THRESHOLD) {
+      motor.move(FORWARD, SPEED); // Call motor.move function to move forward
   }
   else if (left >= THRESHOLD){
-      motor.move(LEFT_FORWARD); // Call motor.move function to turn left
+      motor.move(LEFT,SPEED); // Call motor.move function to turn left
   }
   else if (right >= THRESHOLD){
-      motor.move(RIGHT_FORWARD)// Call motor.move function to turn right
+      motor.move(RIGHT, SPEED);// Call motor.move function to turn right
   }
   else {
-      motor.move(STOP); // Call motor.move function to stop
+      motor.move(STOP, SPEED); // Call motor.move function to stop
   }
 
 }
