@@ -28,6 +28,7 @@ if right_sensor and left_sensor do not detect black and middle_sensor detects bl
   
   set right motor ON
 
+
 // Stop
 
 if right_sensor and left_sensor and middle_sensor do not detect black
@@ -35,6 +36,7 @@ if right_sensor and left_sensor and middle_sensor do not detect black
   set left motor OFF
   
   set right motor OFF
+
 
 // Move Left
 
@@ -44,6 +46,7 @@ if only left_sensor detects black
   
   set right motor ON
 
+
 // Move Right
 
 else if only right_sensor detects black
@@ -52,13 +55,16 @@ else if only right_sensor detects black
   
   set right motor OFF
 
+
 // Sharp Move Right
 
 if right_sensor and middle_sensor detect black
 
+
 // Sharp Move Left
 
 else if left_sensor and middle_sensor detect black
+
 
 // Checks whether line continues after junction or it is the end
 
@@ -69,6 +75,7 @@ if left_sensor and middle_sensor and right_sensor detect black
   set both motors ON for 1/4th rotation
   
   continue to normal line-following algorithm
+
 
 // Finish
 
