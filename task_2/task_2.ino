@@ -1,7 +1,7 @@
 #include <avr/wdt.h>
 #include "Motor.h"
 #include "InfraRedSensor.h"
-#define SPEED 75
+#define SPEED 40
 
 Motor motor;
 InfraRedSensor infrared;
