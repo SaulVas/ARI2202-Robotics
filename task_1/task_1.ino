@@ -8,7 +8,7 @@ UltraSonicSensor ultrasonic;
 InfraRedSensor infrared;
 
 void setup() {
-  Serial.begin(9600)
+  Serial.begin(9600);
   motor.init();
   ultrasonic.init();
   infrared.init();
@@ -16,5 +16,6 @@ void setup() {
 }
 
 void loop() {
-  // Logic to be implemented depending on task
+  infrared.analogue_values();
+  delay(500);
 }
