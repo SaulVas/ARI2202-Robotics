@@ -11,3 +11,76 @@ The experiment is as follows, detect the analogue output from sensing non-reflec
 
 Why is it due to the reflective property?
 The output from an analog read of an IR sensor is a numerical value that represents the intensity of the detected infrared light (0-1023).
+
+
+## Task 3 
+
+1. Pseudocode
+
+Note: Set pins as input 
+      Serial.begin(9600)
+
+// Straight
+
+if right_sensor and left_sensor do not detect black and middle_sensor detects black
+  
+  set left motor ON
+  
+  set right motor ON
+
+
+// Stop
+
+if right_sensor and left_sensor and middle_sensor do not detect black
+
+  set left motor OFF
+  
+  set right motor OFF
+
+
+// Move Left
+
+if only left_sensor detects black
+
+  set left motor OFF
+  
+  set right motor ON
+
+
+// Move Right
+
+else if only right_sensor detects black
+
+  set left motor ON
+  
+  set right motor OFF
+
+
+// Sharp Move Right
+
+if right_sensor and middle_sensor detect black
+
+
+// Sharp Move Left
+
+else if left_sensor and middle_sensor detect black
+
+
+// Checks whether line continues after junction or it is the end
+
+if left_sensor and middle_sensor and right_sensor detect black
+
+  set both motors OFF for 2 seconds
+  
+  set both motors ON for 1/4th rotation
+  
+  continue to normal line-following algorithm
+
+
+// Finish
+
+if left_sensor and middle_sensor and right_sensor detect black
+
+set left motor OFF
+
+set right motor OFF
