@@ -108,23 +108,23 @@ void Motor::move(String direction, int is_speed) {
                   CONTROL_ENABLE); 
   } 
   else if (direction == LEFT_FORWARD) {
-    motor_control(DIRECTION_FRONT, speed,
+    motor_control(DIRECTION_FRONT, speed/2,
                   DIRECTION_VOID, speed,  
                   CONTROL_ENABLE); 
   } 
   else if (direction == LEFT_BACKWARD) {
-    motor_control(DIRECTION_BACK, speed,
-                  DIRECTION_BACK, speed / 2, 
+    motor_control(DIRECTION_BACK, speed/2,
+                  DIRECTION_VOID, speed, 
                   CONTROL_ENABLE); 
   } 
   else if (direction == RIGHT_FORWARD) {
     motor_control(DIRECTION_VOID, speed,
-                  DIRECTION_FRONT, speed, 
+                  DIRECTION_FRONT, speed/2, 
                   CONTROL_ENABLE); 
   } 
   else if (direction == RIGHT_BACKWARD) {
-    motor_control(DIRECTION_BACK, speed / 2,
-                  DIRECTION_BACK, speed, 
+    motor_control(DIRECTION_VOID, speed,
+                  DIRECTION_BACK, speed/2, 
                   CONTROL_ENABLE); 
   } 
   else if (direction == STOP) {
