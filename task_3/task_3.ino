@@ -50,9 +50,8 @@ bool junction_handling () {
     long distance = ultrasonic.get_distance();
 
     if (middle > THRESHOLD && left > THRESHOLD && right > THRESHOLD) {
-        continue;
     } 
-    else if (middle > THRESHOLD || left > THRESHOLD || right > THRESHOLD) {
+    else if (middle > THRESHOLD && (left > THRESHOLD || right > THRESHOLD)) {
         if (distance > 30) {
             return false;
         }
@@ -77,14 +76,16 @@ bool junction_handling () {
                 motor.move(STOP, 0);
                 delay(1000);
             }
+            break;
 
         case 2:
-            if (millis() - junction_steps < 6900) {
+            if (millis() - junction_start_time < 6900) {
                 motor.move(RIGHT, TURNING_SPEED * 2);
             } else {
                 motor.move(STOP, 0);
                 executing = false;
             }
+            break;
     }
 
     return true;
