@@ -64,22 +64,20 @@ bool junction_handling () {
             } else {
                 junction_steps += 1;
                 motor.move(STOP, 0);
-                delay(1000);
             }
             break;
         
         case 1:
-            if (millis() - junction_start_time < 4000) {
+            if (millis() - junction_start_time < 3000) {
                 motor.move(LEFT, TURNING_SPEED);
             } else {
                 junction_steps += 1;
                 motor.move(STOP, 0);
-                delay(1000);
             }
             break;
 
         case 2:
-            if (millis() - junction_start_time < 6900) {
+            if (millis() - junction_start_time < 5900) {
                 motor.move(RIGHT, TURNING_SPEED * 2);
             } else {
                 motor.move(STOP, 0);

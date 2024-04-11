@@ -18,10 +18,7 @@ void loop() {
   int middle = infrared.get_middle();
   int right = infrared.get_right();
 
-  if (middle >= THRESHOLD && (left >= THRESHOLD || right >= THRESHOLD)){
-      motor.move(FORWARD, SPEED); // Call motor.move function to move forward
-  }
-  else if (middle >= THRESHOLD) {
+  if (middle >= THRESHOLD) {
       motor.move(FORWARD, SPEED); // Call motor.move function to move forward
   }
   else if (left >= THRESHOLD){

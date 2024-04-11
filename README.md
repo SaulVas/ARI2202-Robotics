@@ -1,86 +1,66 @@
 # ARI2202-Robotics
 
-Project Part 3 - Line Following
-Task 1 - Analysis
+Project Part 3 - Line Following & Infrared Sensors
 
-1. Define Metrics: Focus will be on detection accuracy, more specifically different coloured lines (example -> black, white and grey). This must be done without changing the light conditions to keep the setup simple. (The obvious observation would be that if the line is the same or similar colour to the floor tiles, then it will be harder to track. I also think that light colours would have trouble being detected depending on how good the sensor is.)
-2. Experimental Setup: Test the module's detection accuracy for the chosen colours on surfaces that are uniform in colour and texture. We need to make sure the line itself contrasts well with each bckground colour so that the module has the best chance at detecting it.
-3. Observation: Note the performance. The module may have higher accuracy on high contrast surfaces (black line on white background) when compared to surfaces with lower contrast (grey line on white surface). It is also possible that the module's sensors have a colour bias due to their inherent sensitivity or the algorithms used to detect the lines.
+## Task 1 - Analysis
 
-The experiment is as follows, detect the analogue output from sensing non-reflective surfaces of 3 colours. Compare this to reflective tape of the 3 colours. Next place a line of reflective tape of each colour onto a plain white paper. See whether the sensor can detect the lines.
+1. Define Metrics: Focus will be on detection accuracy, more specifically different coloured lines (example -> black, white and grey). This must be done without changing the light conditions to keep the setup simple.
+2. Experimental Setup: Test the module's detection accuracy for the chosen colours on surfaces that are uniform in colour and texture.
+3. Observation: Note the performance differences.
 
-Why is it due to the reflective property?
-The output from an analog read of an IR sensor is a numerical value that represents the intensity of the detected infrared light (0-1023).
+The experiment was performed as follows:
+We collected ranges of detection for the background, each of the 3 colours and when the robot was off the ground. These were as follows:
 
+- Background: 37 - 47
+- White Tape: 37 - 45
+- Gray Tape: 170 - 403
+- Black Tape: 615 - 790
+- Off the Ground: 850 + (depending on distance to ground)
 
-## Task 3 
+Using these ranges we created threshold values so the robot could detect what it was on top of and we used serial.print to display the info.
 
-1. Pseudocode
+Observations:
+White tape is impossible to detect as its ranges overlap the background, we had a very high level of accuracy for all the other states.
 
-Note: Set pins as input 
-      Serial.begin(9600)
+## Task 2
 
-// Straight
+For the sake of simplicity in our code we assume we are on a black line whenever a value higher than the lower threshold is recieved. We are ignoring when the robot is lifted off the ground to keep our implementation simple and followable.
 
-if right_sensor and left_sensor do not detect black and middle_sensor detects black
-  
-  set left motor ON
-  
-  set right motor ON
+Our line following algorithm is as follows:
+If (middle on the line):
+Move Forwards
 
+if (Only left on line);
+Turn left
 
-// Stop
+if (only right on line):
+Turn Right
 
-if right_sensor and left_sensor and middle_sensor do not detect black
+If not on line:
+Stop
 
-  set left motor OFF
-  
-  set right motor OFF
+## Task 3
 
+### Path Navigation
 
-// Move Left
+When the robot encounters a sudden change in direction or sharp turn, due to its momentum it tends to slide off the line. Our approach to handle this is to keep track of the last direction the robot turned at all times (Left or Right). When the robot is not on the line, It turns in that direction for 2 seconds at a fixed speed, all the time searching for the line again to continue navigating. If it doesnt find the line in 2 seconds, it turns in the opposite direction for a second and a half at double the speed. This approach allows the robot to handle extremely sharp changes in direction and 90 degree turns.
 
-if only left_sensor detects black
+### Junction Handling
 
-  set left motor OFF
-  
-  set right motor ON
+If all 3 sensors detect the black line we enter junction handling mode. Normal robot opperations are suspended and we go into the first of 3 stages.
 
+#### Stage 1
 
-// Move Right
+In the first stage the robot moves forward for 0.2 seconds to establish whether the black line continues straight after the junction. If a line is detected (middle > THRESHOLD && (left > THRESHOLD || right > THRESHOLD)), we check for obstacles within 30 cm. If no obstacle is detected we return to normal robot operations and continue forwards. Otherwise, if no valid path is detected within 0.2s, We move onto stage 2.
 
-else if only right_sensor detects black
+#### Stage 2
 
-  set left motor ON
-  
-  set right motor OFF
+In the second stage, the robot turns left for 2.8 seconds. During this time it searches for a line without an obstacle. if a valid line is found it continues with normal operations, otherwise if the time runs out we proceed to stage 3.
 
+#### Stage 3
 
-// Sharp Move Right
+In the third stage, the robot turns right at double speed for 2.9 seconds. During this time it searches for a line without an obstacle. if a valid line is found it continues with normal operations, otherwise if the time runs out we stop all robot procedures as weve encountered a dead end.
 
-if right_sensor and middle_sensor detect black
+### Observations
 
-
-// Sharp Move Left
-
-else if left_sensor and middle_sensor detect black
-
-
-// Checks whether line continues after junction or it is the end
-
-if left_sensor and middle_sensor and right_sensor detect black
-
-  set both motors OFF for 2 seconds
-  
-  set both motors ON for 1/4th rotation
-  
-  continue to normal line-following algorithm
-
-
-// Finish
-
-if left_sensor and middle_sensor and right_sensor detect black
-
-set left motor OFF
-
-set right motor OFF
+The blind detection function works great and navigates complex turns fantastically. However, the Junction handling approach is limited by the fov of the robot. If there is a small object on the line, it will not be detected and the robot crashes. On the other hand, if the obstacle is very big, It handles intersections great. the obstacle size does not effect obstacles on the path directly infront of the robot.

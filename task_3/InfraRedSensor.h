@@ -14,7 +14,7 @@ class InfraRedSensor {
     int get_analogue_value(int pin);
 
 public: 
-    # define THRESHOLD 550
+    # define THRESHOLD 600
 
     void init(void);
     int get_left(void);
