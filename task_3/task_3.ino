@@ -42,115 +42,52 @@ void blind_detection (String direction) {
   }
 }
 
-bool junction_handling (long distance) {
+bool junction_handling () {
     int left = infrared.get_left();
     int middle = infrared.get_middle();
     int right = infrared.get_right();
+    ultrasonic.send_pulse();
+    long distance = ultrasonic.get_distance();
 
-    if (middle > THRESHOLD && right > THRESHOLD && left > THRESHOLD) {
-        if (junction_steps == 0) {
-            if (millis() - junction_start_time < 200) {
-                motor.move(FORWARD, FORWARD_SPEED);
-            }
-            else {
-                junction_steps += 1;
-                motor.move(STOP, 0);
-            }
-        }
-        else if (junction_steps == 1) {
-            if (millis() - junction_start_time < 1800) {
-                motor.move(LEFT, TURNING_SPEED * 2);
-            } else {
-                junction_steps += 1;
-                motor.move(STOP, 0);
-            }
-        }
-        else if (junction_steps == 2) {
-            if (millis() - junction_start_time < 4800) {
-                motor.move(RIGHT, TURNING_SPEED * 2);
-            } else {
-                motor.move(STOP, 0);
-                executing = false;
-            }
-        }
+    if (middle > THRESHOLD && left > THRESHOLD && right > THRESHOLD) {
+        continue;
     } 
-
-    else if (middle > THRESHOLD || left > THRESHOLD || RIGHT > THRESHOLD) {
-        if (junction_steps == 0) {
-            if (distance < 30) {
-                junction_steps += 1;
-            } else {
-                junction_mode = false;
-            }
-        }
-        if (junction_steps == 1) {
-            if (middle > THRESHOLD && left > THRESHOLD) {
-                if (distance < 30) {
-                    motor.move(STOP, 0);
-                    junction_steps += 1;
-                } else {
-                    junction_mode = false;
-                }
-            } else {
-                if (millis() - junction_start_time < 1800) {
-                    motor.move(LEFT, TURNING_SPEED * 2);
-                } else {
-                    junction_steps += 1;
-                    motor.move(STOP, 0);
-                }
-            }
-        }
-        if (junction_steps == 2) {
-            if (middle > THRESHOLD && right > THRESHOLD) {
-                if (distance > 30) {
-                    junction_mode = false;
-                } else {
-                    if (millis() - junction_start_time < 4800) {
-                        motor.move(RIGHT, TURNING_SPEED * 2);
-                    } else {
-                        motor.move(STOP, 0);
-                        executing = false;
-                    }
-                }
-            } else {
-                if (millis() - junction_start_time < 4800) {
-                        motor.move(RIGHT, TURNING_SPEED * 2);
-                    } else {
-                        motor.move(STOP, 0);
-                        executing = false;
-                    }
-            }
-        }
-    } 
-    
-    else {
-        if (junction_steps == 0) {
-            if (millis() - junction_start_time < 200) {
-                motor.move(FORWARD, FORWARD_SPEED);
-            }
-            else {
-                junction_steps += 1;
-                motor.move(STOP, 0);
-            }
-        }
-        else if (junction_steps == 1) {
-            if (millis() - junction_start_time < 1800) {
-                motor.move(LEFT, TURNING_SPEED * 2);
-            }
-            else {
-                junction_steps += 1;
-                motor.move(STOP, 0);
-            }
-        }
-        else if (junction_steps == 2) {
-            if (millis() - junction_start_time < 4800) {
-                motor.move(RIGHT, TURNING_SPEED * 2);
-            } else {
-                motor.move(STOP, 0);
-                executing = false;
-            }
+    else if (middle > THRESHOLD || left > THRESHOLD || right > THRESHOLD) {
+        if (distance > 30) {
+            return false;
         }
     }
+
+    switch (junction_steps) {
+        case 0:
+            if (millis() - junction_start_time < 200) {
+                motor.move(FORWARD, FORWARD_SPEED);
+            } else {
+                junction_steps += 1;
+                motor.move(STOP, 0);
+                delay(1000);
+            }
+            break;
+        
+        case 1:
+            if (millis() - junction_start_time < 4000) {
+                motor.move(LEFT, TURNING_SPEED);
+            } else {
+                junction_steps += 1;
+                motor.move(STOP, 0);
+                delay(1000);
+            }
+
+        case 2:
+            if (millis() - junction_steps < 6900) {
+                motor.move(RIGHT, TURNING_SPEED * 2);
+            } else {
+                motor.move(STOP, 0);
+                executing = false;
+            }
+    }
+
+    return true;
 }
 
 void setup() {
@@ -163,9 +100,7 @@ void setup() {
 void loop() {
     while (executing) {
         if (junction_mode) {
-            ultrasonic.send_pulse();
-            long distance = ultrasonic.get_distance();
-            junction_handling(distance);
+            junction_mode = junction_handling();
         }
         else {
             int left = infrared.get_left();
@@ -178,9 +113,7 @@ void loop() {
                 junction_mode = true;
                 junction_steps = 0;
                 junction_start_time = millis();
-                ultrasonic.send_pulse();
-                long distance = ultrasonic.get_distance();
-                junction_handling(distance);
+                junction_mode = junction_handling();
             } 
             else if (middle > THRESHOLD) {
                 motor.move(FORWARD, FORWARD_SPEED);
