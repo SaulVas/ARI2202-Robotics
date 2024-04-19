@@ -1,0 +1,135 @@
+#include <avr/wdt.h>
+#include "Motor.h"
+#include "InfraRedSensor.h"
+#include "UltraSonicSensor.h"
+#define FORWARD_SPEED 100
+#define TURNING_SPEED 50
+
+Motor motor;
+InfraRedSensor infrared;
+UltraSonicSensor ultrasonic;
+bool on_line = true;
+String last_turn = LEFT;
+bool taken_blind_start_time = false;
+bool executing = true;
+bool junction_mode = false;
+int junction_steps = 0;
+unsigned long junction_start_time = millis();
+
+void blind_detection (String direction) {
+  static unsigned long start_time;
+  static String opposite_direction;
+  if (direction == LEFT || direction == RIGHT) {
+    if (direction == LEFT) {
+        opposite_direction = RIGHT;
+    } else {
+        opposite_direction = LEFT;
+    }
+
+    if (!taken_blind_start_time) {
+        start_time = millis();
+        motor.move(STOP, 0);
+        taken_blind_start_time = true;
+    }
+
+    if (millis() - start_time < 2000) {
+        motor.move(direction, TURNING_SPEED);
+    } else if (millis() - start_time < 3500) {
+        motor.move(opposite_direction, TURNING_SPEED*2);
+    } else {
+        motor.move(STOP, 0);
+    }
+  }
+}
+
+bool junction_handling () {
+    int left = infrared.get_left();
+    int middle = infrared.get_middle();
+    int right = infrared.get_right();
+    ultrasonic.send_pulse();
+    long distance = ultrasonic.get_distance();
+
+    if (middle > THRESHOLD && left > THRESHOLD && right > THRESHOLD) {
+    } 
+    else if (middle > THRESHOLD && (left > THRESHOLD || right > THRESHOLD)) {
+        if (distance > 30) {
+            return false;
+        }
+    }
+
+    switch (junction_steps) {
+        case 0:
+            if (millis() - junction_start_time < 200) {
+                motor.move(FORWARD, FORWARD_SPEED);
+            } else {
+                junction_steps += 1;
+                motor.move(STOP, 0);
+            }
+            break;
+        
+        case 1:
+            if (millis() - junction_start_time < 3000) {
+                motor.move(LEFT, TURNING_SPEED);
+            } else {
+                junction_steps += 1;
+                motor.move(STOP, 0);
+            }
+            break;
+
+        case 2:
+            if (millis() - junction_start_time < 5900) {
+                motor.move(RIGHT, TURNING_SPEED * 2);
+            } else {
+                motor.move(STOP, 0);
+                executing = false;
+            }
+            break;
+    }
+
+    return true;
+}
+
+void setup() {
+  motor.init();
+  infrared.init();
+  ultrasonic.init();
+  delay(1000);
+}
+
+void loop() {
+    while (executing) {
+        if (junction_mode) {
+            junction_mode = junction_handling();
+        }
+        else {
+            int left = infrared.get_left();
+            int middle = infrared.get_middle();
+            int right = infrared.get_right();
+
+            if (middle > THRESHOLD && right > THRESHOLD && left > THRESHOLD) {
+                // Junction Handling
+                motor.move(STOP, 0);
+                junction_mode = true;
+                junction_steps = 0;
+                junction_start_time = millis();
+                junction_mode = junction_handling();
+            } 
+            else if (middle > THRESHOLD) {
+                motor.move(FORWARD, FORWARD_SPEED);
+                taken_blind_start_time = false;
+            } 
+            else if (left > THRESHOLD) {
+                motor.move(LEFT, TURNING_SPEED);
+                last_turn = LEFT;
+                taken_blind_start_time = false;
+            } 
+            else if (right > THRESHOLD) {
+                motor.move(RIGHT, TURNING_SPEED);
+                last_turn = RIGHT;
+                taken_blind_start_time = false;
+            } else {
+                blind_detection(last_turn);
+            }
+        }
+    }
+}
