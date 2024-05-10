@@ -2,6 +2,7 @@
 #include "Motor.h"
 #include "UltraSonicSensor.h"
 #include "WallFollower.h"
+#include "ServoRotate.h"
 
 #define SPEED 100
 
@@ -17,35 +18,17 @@ void setup() {
 }
 
 void loop() {
-  // Check for obstacle
-  ultrasonic.send_pulse();
-  long distance = ultrasonic.get_distance();
-  
-  if (distance < 20) {
-    // Obstacle detected, perform obstacle avoidance
-    
-    // Turn 90 degrees left
-    motor.turn(LEFT, 90);
-    
-    // Check for obstacle again
-    ultrasonic.send_pulse();
-    distance = ultrasonic.get_distance();
-    
-    if (distance < 20) {
-      // Obstacle still detected, turn 180 degrees right
-      motor.turn(RIGHT, 180);
-      
-      // Check for obstacle again
-      ultrasonic.send_pulse();
-      distance = ultrasonic.get_distance();
-      
-      if (distance < 20) {
-        // Obstacle still detected, turn another 90 degrees right
-        motor.turn(RIGHT, 90);
-      }
-    }
-  } else {
-    // No obstacle detected, move forward
-    motor.move(FORWARD, SPEED);
-  }
+  // code to make motor rotate
+  /*Serial.println("Rotating to 0 degrees");
+  servo.rotateTo(0);
+  delay(1000);
+
+  Serial.println("Rotating to 90 degrees");
+  servo.rotateTo(90);
+  delay(1000);
+
+  Serial.println("Rotating to 180 degrees");
+  servo.rotateTo(180);
+  delay(1000);*/
+   
 }
