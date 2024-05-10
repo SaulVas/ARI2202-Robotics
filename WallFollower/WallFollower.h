@@ -18,3 +18,4 @@ private:
 };
 
 #endif // WALLFOLLOWER_H
+// wow
