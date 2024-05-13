@@ -36,7 +36,14 @@ void loop() {
     motor.move(LEFT_FORWARD, SPEED);
   }
   else {
-    if (frontDistance < 10) {
+    if (rightDistance > 22.5) {
+      motor.move(FORWARD, SPEED);
+      delay(750);
+      motor.turn(RIGHT, 70);
+      motor.move(FORWARD, SPEED);
+      delay(400);
+    }
+    else if (frontDistance < 10) {
       motor.turn(LEFT, 90);
     } 
     else if (rightDistance > 13) {
