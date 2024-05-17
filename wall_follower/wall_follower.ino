@@ -29,7 +29,7 @@ void setup() {
 void loop() {
   unsigned long current_time = millis();
 
-  if (current_time - start_time > 500) {
+  if (current_time - start_time > 450) {
     motor.move(STOP, 0);
     servo.rotateTo(90);
     delay(350);
@@ -37,17 +37,19 @@ void loop() {
     int frontDistance = ultrasonic.get_distance();
     
     if (frontDistance < 10) {
-      motor.turn(LEFT, 45);
-      delay(80);
+      motor.move(LEFT, 200);
+      delay(270);
       motor.move(STOP, 0);
+      delay(50);
     }
 
     ultrasonic.send_pulse();
     frontDistance = ultrasonic.get_distance();
-    if (frontDistance < 10) {
-      motor.turn(LEFT, 45);
-      delay(80);
+    if (frontDistance < 12) {
+      motor.move(LEFT, 200);
+      delay(225);
       motor.move(STOP, 0);
+      delay(50);
     }
 
     servo.rotateTo(0);
