@@ -32,11 +32,8 @@ private:
 
   #define TIME_FOR_360_DEGREE 6400
 
-  // Controls the motor based on direction of each side, speed and enable/disable control
-  void motor_control(boolean direction_A, uint8_t speed_A,
-                                     boolean direction_B, uint8_t speed_B, 
-                                     boolean controlED                     
-  );         
+  
+      
 
 public:
   // Movement directions 
@@ -52,6 +49,11 @@ public:
 
   // Initializes the motor hardware settings, must be called in setup()
   void init(void);
+  // Controls the motor based on direction of each side, speed and enable/disable control
+    void motor_control(boolean direction_A, uint8_t speed_A,
+                                     boolean direction_B, uint8_t speed_B, 
+                                     boolean controlED                     
+  );   
 
   // Moves the robot based on direction, speed
   void move(String direction, int speed); 

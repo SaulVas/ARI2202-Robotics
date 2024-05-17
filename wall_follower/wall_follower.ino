@@ -3,11 +3,15 @@
 #include "UltraSonicSensor.h"
 #include "ServoRotate.h"
 
-#define SPEED 50
+#define SPEED 35
 
 Motor motor;
 UltraSonicSensor ultrasonic;
 ServoRotate servo;
+unsigned long start_time;
+  const int targetDistance = 7.5; // Target distance from the wall in cm
+  const float proportionalGain = 3.3; // Proportional gain for correction
+  int baseSpeed = 100;
 
 
 void setup() {
@@ -15,45 +19,59 @@ void setup() {
   ultrasonic.init();
   servo.init();
   Serial.begin(9600);
+  servo.rotateTo(0);
   delay(1000);
+  start_time = millis();
 }
 
+// Constant and Variables for Wall Following
+
+
+
 void loop() {
+  unsigned long current_time = millis();
 
-  servo.rotateTo(90);
-  delay(350);
-  ultrasonic.send_pulse();
-  long frontDistance = ultrasonic.get_distance();
-
-  servo.rotateTo(0);
-  delay(350);
-  ultrasonic.send_pulse();
-  long rightDistance = ultrasonic.get_distance();
-
-  
-  // motor.move(FORWARD, SPEED);
-    if (rightDistance < 10) {
-    motor.move(LEFT_FORWARD, SPEED);
+  if (current_time - start_time > 1500) {
+    motor.move(STOP, 0);
+    start_time = millis();
+    servo.rotateTo(90);
+    delay(350);
+    ultrasonic.send_pulse();
+    int frontDistance = ultrasonic.get_distance();
+    
+    if (frontDistance < 8) {
+      motor.turn(LEFT, 55);
+    }
+    servo.rotateTo(0);
+    delay(350);
   }
-  else {
-    if (rightDistance > 22.5) {
-      motor.move(FORWARD, SPEED);
-      delay(750);
-      motor.turn(RIGHT, 70);
-      motor.move(FORWARD, SPEED);
-      delay(400);
-    }
-    else if (frontDistance < 10) {
-      motor.turn(LEFT, 90);
-    } 
-    else if (rightDistance > 13) {
-      motor.move(RIGHT_FORWARD, SPEED);
-    }
-    else {
-      motor.move(FORWARD, SPEED);
-    }
+  ultrasonic.send_pulse();
+  int currentDistance = ultrasonic.get_distance();
 
-  }  
+  // Calculate error with saturation
+  int error;
+  if (currentDistance > 25) {
+    error = 25 - targetDistance; // Cap the error to the value at 25 cm
+  } else {
+    error = currentDistance - targetDistance;
+  }
+
+  // Calculate speed adjustment
+  int speedAdjustment = proportionalGain * error;
+
+  // Set motor speeds
+  int rightMotorSpeed = baseSpeed - speedAdjustment;
+  int leftMotorSpeed = baseSpeed + speedAdjustment;
+
+  // Ensure speeds remain within 0-255
+  rightMotorSpeed = constrain(rightMotorSpeed, 0, 255);
+  leftMotorSpeed = constrain(leftMotorSpeed, 0, 255);
+
+  // Move robot
+  motor.motor_control(DIRECTION_FRONT, rightMotorSpeed, DIRECTION_FRONT, leftMotorSpeed, CONTROL_ENABLE);
+
+  // Delay to allow for movement
+  delay(75);
    
 }
   
