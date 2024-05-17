@@ -30,7 +30,7 @@ private:
   #define CONTROL_ENABLE true
   #define CONTROL_DISABLE false
 
-  #define TIME_FOR_360_DEGREE 6400
+  #define TIME_FOR_360_DEGREE 3200
 
   
       
@@ -59,6 +59,9 @@ public:
   void move(String direction, int speed); 
 
   void turn(String direction, int degrees);
+
+  void turnLeft();
+
 };
 
 #endif

@@ -3,15 +3,13 @@
 #include "UltraSonicSensor.h"
 #include "ServoRotate.h"
 
-#define SPEED 35
-
 Motor motor;
 UltraSonicSensor ultrasonic;
 ServoRotate servo;
 unsigned long start_time;
-  const int targetDistance = 7.5; // Target distance from the wall in cm
-  const float proportionalGain = 3.3; // Proportional gain for correction
-  int baseSpeed = 100;
+const int targetDistance = 10; // Target distance from the wall in cm
+const float proportionalGain = 5.5; // Proportional gain for correction
+int baseSpeed = 100;
 
 
 void setup() {
@@ -31,19 +29,30 @@ void setup() {
 void loop() {
   unsigned long current_time = millis();
 
-  if (current_time - start_time > 1500) {
+  if (current_time - start_time > 500) {
     motor.move(STOP, 0);
-    start_time = millis();
     servo.rotateTo(90);
     delay(350);
     ultrasonic.send_pulse();
     int frontDistance = ultrasonic.get_distance();
     
-    if (frontDistance < 8) {
-      motor.turn(LEFT, 55);
+    if (frontDistance < 10) {
+      motor.turn(LEFT, 45);
+      delay(80);
+      motor.move(STOP, 0);
     }
+
+    ultrasonic.send_pulse();
+    frontDistance = ultrasonic.get_distance();
+    if (frontDistance < 10) {
+      motor.turn(LEFT, 45);
+      delay(80);
+      motor.move(STOP, 0);
+    }
+
     servo.rotateTo(0);
     delay(350);
+    start_time = millis();
   }
   ultrasonic.send_pulse();
   int currentDistance = ultrasonic.get_distance();
@@ -64,8 +73,8 @@ void loop() {
   int leftMotorSpeed = baseSpeed + speedAdjustment;
 
   // Ensure speeds remain within 0-255
-  rightMotorSpeed = constrain(rightMotorSpeed, 0, 255);
-  leftMotorSpeed = constrain(leftMotorSpeed, 0, 255);
+  rightMotorSpeed = constrain(rightMotorSpeed, 0, 150);
+  leftMotorSpeed = constrain(leftMotorSpeed, 0, 150);
 
   // Move robot
   motor.motor_control(DIRECTION_FRONT, rightMotorSpeed, DIRECTION_FRONT, leftMotorSpeed, CONTROL_ENABLE);

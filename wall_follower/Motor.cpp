@@ -140,7 +140,12 @@ void Motor::move(String direction, int is_speed) {
 
 void Motor::turn(String direction, int degrees) {
   if (direction == LEFT || direction == RIGHT) {
-    move(direction, 50);
+    move(direction, 100);
     delay((degrees / 360.0) * TIME_FOR_360_DEGREE);
   }
+}
+
+void Motor::turnLeft() {
+  move(LEFT, 100);
+  
 }
