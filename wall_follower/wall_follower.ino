@@ -22,7 +22,7 @@ void setup() {
   servo.init();
   irs.init();
   servo.rotateTo(0);
-  delay(1000);
+  delay(1000); //time to start
   start_time = millis();
 }
 
@@ -40,30 +40,30 @@ void loop() {
     if ((left > BLACK_LOWER && left < BLACK_UPPER) && (middle > BLACK_LOWER && middle < BLACK_UPPER) && (right > BLACK_LOWER && right < BLACK_UPPER)){
       foundEnd = true;
       motor.move(FORWARD, 100);
-      delay(350);
+      delay(350); //time moving forward
       motor.move(STOP, 0);
-      delay(1000);
+      delay(1000); //found end pause
       servo.rotateTo(90);
-      delay(350);
+      delay(350); //time for the servo to move
       ultrasonic.send_pulse();
       int frontDistance = ultrasonic.get_distance();
 
       if (frontDistance < 20) {
         servo.rotateTo(180);
-        delay(350);
+        delay(350); //time for servo to rotate
         ultrasonic.send_pulse();
         int leftDistance = ultrasonic.get_distance();
         if (leftDistance < 20) {
           motor.move(LEFT, 200);
-          delay(500);
+          delay(500); //time moving left
           motor.move(STOP, 0);
-          delay(50);
+          delay(50); //time stopped  
         }
         else {
           motor.move(LEFT, 200);
-          delay(250);
+          delay(250); //time turning left
           motor.move(STOP, 0);
-          delay(50);
+          delay(50); //time stopped
         }
       }
     }
@@ -71,14 +71,14 @@ void loop() {
   else if (foundEnd) {
     if ((left > GRAY_LOWER && left < GRAY_UPPER) && (middle > GRAY_LOWER && middle < GRAY_UPPER) && (right > GRAY_LOWER && right < GRAY_UPPER)){
         motor.move(FORWARD, baseSpeed);
-        delay(400);
+        delay(400); //time moving forward
         rightWall = false;
         motor.move(STOP, 0);
-        delay(1000);
+        delay(1000); //time stopped to reset
         motor.move(LEFT, 200);
-        delay(500);
+        delay(500); //time turning left
         motor.move(STOP, 0);
-        delay(50);
+        delay(50); //time stopped
   }
 }
   
@@ -86,30 +86,30 @@ void loop() {
     if (current_time - start_time > 400) {
       motor.move(STOP, 0);
       servo.rotateTo(90);
-      delay(350);
+      delay(350); //time for servo to rotate
       ultrasonic.send_pulse();
       int frontDistance = ultrasonic.get_distance();
       
       if (frontDistance < 10) {
           motor.move(LEFT, 200);
-          delay(270);
+          delay(270); //time turning left
           motor.move(STOP, 0);
-          delay(50);
+          delay(50); //time stopped
       }
 
       motor.move(STOP, 0);
-      delay(50);
+      delay(50); //time stopped
       ultrasonic.send_pulse();
       frontDistance = ultrasonic.get_distance();
       if (frontDistance < 12) {
           motor.move(LEFT, 200);
-          delay(270);
+          delay(270); //time turning left
           motor.move(STOP, 0);
-          delay(50);
+          delay(50); //time sotpped
       }
 
       servo.rotateTo(0);
-      delay(350);
+      delay(350); //time for servo to rotate
       start_time = millis();
     }
     ultrasonic.send_pulse();
@@ -141,34 +141,34 @@ void loop() {
     if (!rightWall){
       if ((left > BLACK_LOWER && left < BLACK_UPPER) && (middle > BLACK_LOWER && middle < BLACK_UPPER) && (right > BLACK_LOWER && right < BLACK_UPPER)){
         motor.move(STOP, 0);
-        delay(300000);
+        delay(300000); //end
       }
     }
     if (current_time - start_time > 400) {
       motor.move(STOP, 0);
       servo.rotateTo(90);
-      delay(350);
+      delay(350); //time for servo to rotate
       ultrasonic.send_pulse();
       int frontDistance = ultrasonic.get_distance();
       
       if (frontDistance < 10) {
         motor.move(RIGHT, 200);
-        delay(270);
+        delay(270); //time turning right
         motor.move(STOP, 0);
-        delay(50);
+        delay(50); //time stopped
       }
 
       ultrasonic.send_pulse();
       frontDistance = ultrasonic.get_distance();
       if (frontDistance < 12) {
         motor.move(RIGHT, 200);
-        delay(225);
+        delay(225); //time moving right
         motor.move(STOP, 0);
-        delay(50);
+        delay(50); //time stopped
       }
 
       servo.rotateTo(180);
-      delay(350);
+      delay(350); //time for servo to rotate
       start_time = millis();
     }
     ultrasonic.send_pulse();
