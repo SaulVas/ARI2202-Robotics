@@ -15,10 +15,10 @@ class InfraRedSensor {
 
 public: 
     # define THRESHOLD 600
-    # define BLACK_LOWER 800
-    # define BLACK_UPPER 900
-    # define GRAY_LOWER 300
-    # define GRAY_UPPER 800
+    # define BLACK_LOWER 500
+    # define BLACK_UPPER 1000
+    # define GRAY_LOWER 200
+    # define GRAY_UPPER 500
 
     void init(void);
     int get_left(void);
