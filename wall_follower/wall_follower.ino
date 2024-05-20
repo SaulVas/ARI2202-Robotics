@@ -74,7 +74,7 @@ void loop() {
       ultrasonic.send_pulse();
       int frontDistance = ultrasonic.get_distance();
       
-      if (frontDistance < 12) {
+      if (frontDistance < 10) {
           motor.move(LEFT, 200);
           delay(270); //time turning left
       }
@@ -86,7 +86,7 @@ void loop() {
       // delay(50); //time stopped
       ultrasonic.send_pulse();
       frontDistance = ultrasonic.get_distance();
-      if (frontDistance < 15) {
+      if (frontDistance < 12) {
           motor.move(LEFT, 200);
           delay(225); //time turning left
           motor.move(STOP, 0);
@@ -136,7 +136,7 @@ void loop() {
       ultrasonic.send_pulse();
       int frontDistance = ultrasonic.get_distance();
       
-      if (frontDistance < 12) {
+      if (frontDistance < 10) {
         motor.move(RIGHT, 200);
         delay(270); //time turning right
       }
@@ -145,7 +145,7 @@ void loop() {
       delay(75); //time stopped
       ultrasonic.send_pulse();
       frontDistance = ultrasonic.get_distance();
-      if (frontDistance < 15) {
+      if (frontDistance < 12) {
         motor.move(RIGHT, 200);
         delay(225); //time moving right
         motor.move(STOP, 0);
